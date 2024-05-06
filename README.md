@@ -24,7 +24,7 @@ This repository is the base of the case study for all potential DevSecOps engine
 
 ## Scoring
 
-- The verifier of this challenge will clone your repository and run "helmfile apply ." and then trying to access casestudy.local.yarowa.io in a browser. Make sure to leave instructions if the kind/minikube/k3s setup needs special configs to expose the ports 80 / 443.
+The verifier of this challenge will clone your repository and run "helmfile apply ." and then trying to access casestudy.local.yarowa.io in a browser. Make sure to leave instructions if the kind/minikube/k3s setup needs special configs to expose the ports 80 / 443.
 
 - `app/` contains working code: 10 Points
 - `helmchart/` contains working helmchart: 10 Points
