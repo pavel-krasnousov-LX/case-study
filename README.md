@@ -5,7 +5,7 @@ This repository is the base of the case study for all potential DevSecOps engine
 ## Instructions
 
 1. Fork this repository.
-1. Build an application using the programming language of your choice in the `app/` folder which runs a webservice on Port 5000 and responds with "Hello Yarowa AG!" to any of the requests.
+1. Build an application using the programming language of your choice in the `app/` folder which runs a webservice on Port 5000 and responds with "Hello Yarowa AG!" to any requests (e.g. curl http://localhost:5000/).
 1. Build a Dockerfile which packages the app into a container and runs the previously written app on startup.
 1. Build a Helmchart in `helmchart/` that runs the docker container in a deployment with a service and ingress infront of it.
 1. Orchestrate the helmchart deployment in `helmfile.d/` and add all helm charts needed to serve the application starting from a brand new kind/k3s/minikube cluster.
@@ -20,9 +20,11 @@ This repository is the base of the case study for all potential DevSecOps engine
 - You might need to publish your Dockerimage on dockerhub.com or leave instructions on how the k8s cluster can pull the image.
 - Your custom helmchart for the "Hello Yarowa!" applicatioan can be referenced using relative paths (e.g. `chart: ../helmchart/mychart`).
 - Please transparently declare the use of ChatGPT or other AI helpers as comments in the files if you use them.
-- The verifier of this challenge will clone your repository and run "helmfile apply ." and then trying to access casestudy.local.yarowa.io in a browser. Make sure to leave instructions if the kind/minikube/k3s setup needs special configs to expose the ports 80 / 443.
+- If you add other helmcharts with ingresses you can use *.local.yarowa.io (e.g. grafana.local.yarowa.io)
 
 ## Scoring
+
+- The verifier of this challenge will clone your repository and run "helmfile apply ." and then trying to access casestudy.local.yarowa.io in a browser. Make sure to leave instructions if the kind/minikube/k3s setup needs special configs to expose the ports 80 / 443.
 
 - `app/` contains working code: 10 Points
 - `helmchart/` contains working helmchart: 10 Points
