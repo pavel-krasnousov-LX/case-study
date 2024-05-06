@@ -4,13 +4,13 @@ This repository is the base of the case study for all potential DevSecOps engine
 
 ## Instructions
 
-1. Fork this repository.
+1. Fork this repository and mark it as private.
 1. Build an application using the programming language of your choice in the `app/` folder which runs a webservice on Port 5000 and responds with "Hello Yarowa AG!" to any requests (e.g. curl http://localhost:5000/).
 1. Build a Dockerfile which packages the app into a container and runs the previously written app on startup.
 1. Build a Helmchart in `helmchart/` that runs the docker container in a deployment with a service and ingress infront of it.
 1. Orchestrate the helmchart deployment in `helmfile.d/` and add all helm charts needed to serve the application starting from a brand new kind/k3s/minikube cluster.
 1. Commit all code to your repo.
-1. Send the link to the repo to your contact at Yarowa and wait for feedback.
+1. Send the zipped repo to your contact at Yarowa and wait for feedback.
 
 ## Guidelines / Rules
 
