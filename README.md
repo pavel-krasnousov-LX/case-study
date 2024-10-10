@@ -1,34 +1,92 @@
-# Case Study for DevSecOps role at Yarowa AG
+# Hello YAROWA web page repo
 
-This repository is the base of the case study for all potential DevSecOps engineers at Yarowa AG.
+This repo contains:
+1. `/app/` - simple Phyton app web page
+2. `/helmchart/yarowa/` - HELM chart
+3. `/helmfile.d/` - helmfile instructions
+4. `dockerfile` - build docker image from with simple Phyton app
+5. THIS README.md
 
-## Instructions
 
-1. Fork this repository and mark it as private.
-1. Build an application using the programming language of your choice in the `app/` folder which runs a webservice on Port 5000 and responds with "Hello Yarowa AG!" to any requests (e.g. curl http://localhost:5000/).
-1. Build a Dockerfile which packages the app into a container and runs the previously written app on startup.
-1. Build a Helmchart in `helmchart/` that runs the docker container in a deployment with a service and ingress infront of it.
-1. Orchestrate the helmchart deployment in `helmfile.d/` and add all helm charts needed to serve the application starting from a brand new kind/k3s/minikube cluster.
-1. Commit all code to your repo.
-1. Send the zipped repo to your contact at Yarowa and wait for feedback.
+## Description
+Following this instruction you should be able to run simple Python based application locally.
+Inside k8s based on `k3s`
 
-## Guidelines / Rules
+## Prerequisites
+Solution tested on Ubuntu 24/04
+Should be already installed next packages:
+1. curl
+2. git
+3. kubectl
+4. helm
+5. helm diff plugin
+6. helmfile
 
-- Please take note on how long you took to get this case study done (ideally you shouldn't spend more than 4 hours).
-- The ingress should listen to the Domain/Host: casestudy.local.yarowa.io (DNS is statically pointing to 127.0.0.1 so you will need to setup a minikube/k3s/kind environment that listens on localhost).
-- The ingress should listen on HTTP only and forward the requests to the setup service.
-- You might need to publish your Dockerimage on dockerhub.com or leave instructions on how the k8s cluster can pull the image.
-- Your custom helmchart for the "Hello Yarowa!" applicatioan can be referenced using relative paths (e.g. `chart: ../helmchart/mychart`).
-- Please transparently declare the use of ChatGPT or other AI helpers as comments in the files if you use them.
-- If you add other helmcharts with ingresses you can use *.local.yarowa.io (e.g. grafana.local.yarowa.io)
+### Modify hosts file
 
-## Scoring
+```Bash
+sudo vim /etc/hosts
+```
 
-The verifier of this challenge will clone your repository and run "helmfile apply ." and then trying to access casestudy.local.yarowa.io in a browser. Make sure to leave instructions if the kind/minikube/k3s setup needs special configs to expose the ports 80 / 443.
+Add string to `hosts` file
+```Bash
+127.0.0.1 casestudy.local.yarowa.io
+```
 
-- `app/` contains working code: 10 Points
-- `helmchart/` contains working helmchart: 10 Points
-- `helmfile.d/` contains full orchestration of setup: 30 Points
-- verifier can successfully open casestudy.local.yarowa.io and received "Hello Yarowa!" as response: 50 Points
-- Up to 50 Bonus points for: elegant code (10pts), full instrumentation (20pts), test cases (10pts), surprising solutions (10pts)
-- Maximum Score: 150 Points
+It's assumed that you already have installed k3s with nginx-controller using host network.<br/>
+If not - run next commands:
+```Bash
+curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --disable traefik
+mkdir ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/deploy.yaml
+```
+Check that `ingress-nginx-controller` deployed
+```Bash
+kubectl get pods --all-namespaces -w
+NAMESPACE       NAME                                        READY   STATUS      RESTARTS   AGE
+...
+ingress-nginx   ingress-nginx-controller-65b9658c5f-xcmrs   0/1     Running     0          3h18m
+...
+```
+Patch `ingress-nginx-controller` to use host network
+```Bash
+cat > ingress.yaml <<EOF
+spec:
+  template:
+    spec:
+      hostNetwork: true
+EOF
+kubectl patch deployment ingress-nginx-controller -n ingress-nginx --patch "$(cat ingress.yaml)"
+```
+
+## Deploy solution
+!!! NOTICE !!!<br/>
+Defult image `yarowa:0.1` was pre-built by `dockerfile` from this repo<br/>
+And pushed to personal Dockerhub `pavelkleverx/yarowa`<br/>
+<br/><br/>
+
+Checkout repo
+```Bash
+git clone https://github.com/pkrasnousov/case-study.git
+```
+
+cd
+```Bash
+cd case-study
+```
+deploy app
+
+```Bash
+helmfile apply
+```
+After deployment completed run:
+```Bash
+curl casestudy.local.yarowa.io
+```
+and get
+```Bash
+Hello Yarowa AG!
+```
+## ChatGPT usage
+ChatGPT was used to generate `.gitignore` files.
