@@ -68,7 +68,7 @@ And pushed to personal Dockerhub `pavelkleverx/yarowa`<br/>
 
 Checkout repo
 ```Bash
-git clone https://github.com/pkrasnousov/case-study.git
+git clone https://github.com/pavel-krasnousov-LX/case-study
 ```
 
 cd
